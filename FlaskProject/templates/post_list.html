@@ -1,0 +1,31 @@
+<ul class="posts" >
+	{% for post in posts %}
+
+		<li>
+
+			<a class="header" href="#">
+				<h3 class="post_title">
+					{{ post.title|truncate(50, killwords=True) }}
+				</h3>
+				<span class="post_text">
+					{{ post.text|truncate(100, killwords=True) }}
+				</span>
+			</a>
+
+			<div class="info">
+				<br>
+
+				<a href="{{ url_for('user', username=post.user.username) }}">
+					{{ post.user.username }}
+				</a>
+				{{ moment(post.date).fromNow() }}.
+				{% if current_user == post.user %}
+					<span class="editlinks">
+						<a href="{{ url_for('edit_post', post_id=post.id) }}">edit</a>
+					</span>
+				{% endif %}
+
+			</div>
+		</li>
+	{% endfor %}
+</ul>

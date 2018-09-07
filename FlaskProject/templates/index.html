@@ -1,0 +1,33 @@
+
+
+{% extends "base.html" %}
+
+{% block title %}
+Main page index
+{% endblock %}
+
+{% block content %}
+
+    <article>
+        <header>
+            <h1>This site</h1>
+            <p>Welcome to This site. Here's an introduction and some other text.</p>
+        </header>
+
+        <section>
+            <h2>New Posts</h2>
+
+            {% if new_posts.count() > 0 %}
+                {% with posts=new_posts %}
+                    {% include "post_list.html" %}
+                {% endwith %}
+            {% else %}
+                No posts yet.
+            {% endif %}
+
+        </section>
+
+    </article>
+
+{% endblock %}
+

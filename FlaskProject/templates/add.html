@@ -1,0 +1,45 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+Add a post
+{% endblock %}
+
+{% block content %}
+
+	<section>
+		<h1>Add a new post</h1>
+		<form action="" method="post">
+			{{form.hidden_tag()}}
+			<p {% if form.title.errors %} class="error" {% endif %}>
+				Title:
+				<!-- <input type="text" name="title"> -->
+				{{form.title(size = 50)}}
+			</p>
+			<p>
+				<ul>
+					{% for error in form.title.errors %}
+						<li>{{ error }}</li>
+					{% endfor %}
+				</ul>
+			</p>
+
+			<p>
+				Text:
+				<!-- <input type="text" name="text"> -->
+				{{form.text(size = 100)}}
+			</p>
+
+			<p>
+				<button type="sumbit">Submit</button>
+			</p>
+		</form>
+	</section>
+
+{% endblock %}
+
+                
+{% block sidebar %}
+
+
+{% endblock %}

@@ -1,0 +1,41 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+Log In
+{% endblock %}
+
+{% block content %}
+
+	<section>
+		<h1>Log in</h1>
+		<form action="" method="post">
+			{{form.hidden_tag()}}
+			<p>
+				Username:
+				<!-- <input type="text" name="title"> -->
+				{{form.username(size = 50)}}
+			</p>
+			<p>
+				Password: 
+				{{form.password(size = 50)}}
+			</p>
+			<p>
+				Remember me: 
+				{{form.remember_me()}}
+			</p>
+
+
+			<p>
+				<button type="sumbit">Submit</button>
+			</p>
+		</form>
+	</section>
+
+{% endblock %}
+
+                
+{% block sidebar %}
+
+
+{% endblock %}
