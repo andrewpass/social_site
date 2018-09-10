@@ -11,14 +11,14 @@ class PostForm(Form):
 	text = StringField('text')
 	# link = URLField('link', validators=[url()])
 
-
+class CommentForm(Form):
+	text = StringField('text')
 
 class LoginForm(Form):
 	username = StringField('Username:', validators=[DataRequired()])
 	password = PasswordField('Password', validators=[DataRequired()])
 	remember_me = BooleanField('Keep me logged in')
 	submit = SubmitField('Log In')
-
 
 class SignupForm(Form):
 	username = StringField('Username', 

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+Post - {{ post.title }}
+{% endblock %}
+
+{% block content %}
+<br>
+	<section>
+		<h2 class="post_title">
+			Post: {{ post.title }}
+		</h2>
+		<span class="post_text">
+			{{ post.text}}
+		</span>
+
+		<br>
+		<a href="{{ url_for('user', username=post.user.username) }}">
+			{{ post.user.username }}
+		</a>
+		{{ moment(post.date).fromNow() }}.
+		{% if current_user == post.user %}
+			<span class="editlinks">
+				<a href="{{ url_for('edit_post', post_id=post.id) }}">edit</a>
+			</span>
+		{% endif %}
+		
+        {% if new_comments.count() > 0 %}
+            {% with comments=post.comments %}
+                {% include "comment_list.html" %}
+            {% endwith %}
+        {% else %}
+            No comments yet.
+        {% endif %}
+
+		<br>
+		<br>
+		<br>
+		<span>
+			<a href="{{ url_for('add_comment', post_id=post.id) }}">Make a comment</a>
+		</span>
+
+	</section>
+
+{% endblock %}
+
+                
+{% block sidebar %}
+
+
+{% endblock %}

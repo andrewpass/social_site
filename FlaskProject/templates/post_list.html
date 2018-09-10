@@ -3,7 +3,7 @@
 
 		<li>
 
-			<a class="header" href="#">
+			<a class="header" href="{{ url_for('post', post_id=post.id) }}">
 				<h3 class="post_title">
 					{{ post.title|truncate(50, killwords=True) }}
 				</h3>
