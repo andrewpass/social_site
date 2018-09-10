@@ -4,8 +4,8 @@ from flask import Flask, render_template, url_for, request, redirect, flash, abo
 from flask_login import login_required, login_user, logout_user, current_user
 
 from FlaskProject import app, db, login_manager
-from FlaskProject.forms import PostForm, LoginForm, SignupForm
-from FlaskProject.models import User, Post
+from FlaskProject.forms import PostForm, LoginForm, SignupForm, CommentForm
+from FlaskProject.models import User, Post, Comment
 
 
 # def logged_in_user():
@@ -25,10 +25,8 @@ def index():
 @login_required
 def add():
 	form = PostForm()
-	print(form)
 	if form.validate_on_submit():
 		title = form.title.data
-		print(title)
 		text = form.text.data
 		post = Post(user=current_user, title=title, text=text)
 		db.session.add(post)
@@ -37,7 +35,7 @@ def add():
 		return redirect(url_for('index'))
 	return render_template('post_form.html', form=form, title="Add a post")
 
-@app.route('/edit/<int:post_id>', methods=['GET', 'POST'])
+@app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
 @login_required
 def edit_post(post_id):
 	post = Post.query.get_or_404(post_id)
@@ -50,6 +48,35 @@ def edit_post(post_id):
 		flash("Edited '{}'".format(post.title))
 		return redirect(url_for('user', username=current_user.username))
 	return render_template('post_form.html', form=form, title="Edit post")
+
+@app.route('/post/<int:post_id>/add', methods=['GET', 'POST'])
+@login_required
+def add_comment(post_id):
+	form = CommentForm()
+	if form.validate_on_submit():
+		text = form.text.data
+		comment = Comment(user=current_user, post_id=post_id, text=text)
+		db.session.add(comment)
+		db.session.commit()
+		flash("Commented: '{}'".format(text))
+		return redirect(url_for('post', post_id=post_id))
+	return render_template('comment_form.html', form=form, title="Add a post")
+
+
+
+@app.route('/edit_comment/<int:comment_id>', methods=['GET', 'POST'])
+@login_required
+def edit_comment(comment_id):
+	comment = Comment.query.get_or_404(comment_id)
+	if current_user != comment.user:
+		abort(403)
+	form = CommentForm(obj=comment)
+	if form.validate_on_submit():
+		form.populate_obj(comment)
+		db.session.commit()
+		flash("Edited '{}'".format(comment.id))
+		return redirect(url_for('post', post_id=comment.post_id))
+	return render_template('comment_form.html', form=form, title="Edit comment")
 
 
 
@@ -87,6 +114,15 @@ def signup():
 		flash('Welcome, {}! Please login.'.format(user.username))
 		return redirect(url_for('login'))
 	return render_template("signup.html", form=form)
+
+@app.route('/post/<post_id>')
+def post(post_id):
+	post = Post.query.filter_by(id=post_id).first_or_404()
+	return render_template('post.html', post=post, new_comments=Comment.newest(post_id=post_id, num=5))
+
+
+
+
 
 
 @app.errorhandler(404)
