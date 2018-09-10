@@ -13,8 +13,8 @@
 				<a href="{{ url_for('user', username=comment.user.username) }}">
 					{{ comment.user.username }}
 				</a>
-				{{ moment(post.date).fromNow() }}.
-				{% if current_user == post.user %}
+				{{ moment(comment.date).fromNow() }}.
+				{% if current_user == comment.user %}
 					<span class="editlinks">
 						<a href="{{ url_for('edit_comment', comment_id=comment.id) }}">edit</a>
 					</span>
